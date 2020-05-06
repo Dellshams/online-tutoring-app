@@ -10,6 +10,8 @@ const userSchema = new Schema({
 
     password: { type: String, required: true },
 
+    token: { type: string },
+
     userCategory: { type: String, enum: ['student','tutor','admin'] },
 
 },  {timestamps: true});
