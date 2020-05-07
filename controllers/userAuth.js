@@ -73,11 +73,7 @@ exports.logIn = (req, res, next) =>{
         );
         User.findByIdAndUpdate(user._id, {token: token})
         res.status(200).send({
-          status: true,
-          message: "Login successful",
-          _id: user._id,
-          token
-        });
+          status: true, message: "Login successful", _id: user._id, token });
         console.log(user.token)
       });
     })
