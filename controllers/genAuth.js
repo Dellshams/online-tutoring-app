@@ -1,19 +1,24 @@
 const User = require("../models/user");
-const Subject = require("../models/subjectModel");
 const Category= require("../models/categoryModel");
+const Subject = require("../models/subjectModel");
+
 
 exports.getSubjectInCategoryById = (req, res, next) =>{
     const subjectId = req.body;
-    const categoryName = req.body;
 
-    Category.findOne({ name: categoryName })
-    .populate({ path: "subjects", match: { _id: subjectId }})
+    Subject.findById(subjectId)
     .then( subject => {
         if(!subject){
             return res.status(404)
-            .send({ status: false, message: "Subject not found" })
+            .send({ status: false, message: "subject not found"})
         }
-        res.status(200).send({ message:"subject found", subject: subjects })
+        else{
+            Subject.findById(subjectId)
+            .then( subject => {
+                return res.status(200)
+                .send({ status: true, message: subject})
+            })
+        }
     })
     .catch( err => console.log (err))
 }
@@ -21,7 +26,7 @@ exports.getSubjectInCategoryById = (req, res, next) =>{
 exports.getAllSubjectsInACategory = (req, res, next) => {
     const categoryName = req.body;
 
-    Category.findOne({ name: categoryName })
+    Category.findOne(categoryName)
     .populate("subjects")
     .then( subjects => {
         res.status(200)
