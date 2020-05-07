@@ -10,17 +10,11 @@ const userSchema = new Schema({
 
     password: { type: String, required: true },
 
-<<<<<<< Updated upstream
-    token: { type: string },
-
-    userCategory: { type: String, enum: ['student','tutor','admin'] },
-=======
     subjects: { type: Array },
 
     token: { type: string },
 
     userCategory: { type: String, enum: ["student","tutor","admin"] },
->>>>>>> Stashed changes
 
 },  {timestamps: true});
 
