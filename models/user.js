@@ -12,7 +12,7 @@ const userSchema = new Schema({
 
     subjects: { type: Array },
 
-    token: { type: string },
+    token: { type: String },
 
     userCategory: { type: String, enum: ["student","tutor","admin"] },
 
