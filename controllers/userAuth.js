@@ -14,11 +14,7 @@ exports.signUp = (req, res, next) => {
             status: false,
             message: "All fields are required"})
     return;
-<<<<<<< Updated upstream
-    } else if(userCategory == 'admin'){
-=======
     } else if(userCategory == "admin"){
->>>>>>> Stashed changes
         res.status(400)
         .send({ status: false, message: "You can't sign up as an admin"})
         return;
