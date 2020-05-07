@@ -10,20 +10,18 @@ exports.signUp = (req, res, next) => {
     const userCategory = req.body.userCategory;
 
     if(!firstName || !lastName || !email || !password || !userCategory) {
-        res.status(400).send({
-            status: false,
-            message: "All fields are required"})
-    return;
+        return res.status(400)
+        .send({ status: false, message: "All fields are required"})
+
     } else if(userCategory == "admin"){
-        res.status(400)
+        return res.status(400)
         .send({ status: false, message: "You can't sign up as an admin"})
-        return;
+
     }
     User.findOne({ email })
     .then(user => {
         if (user) {
-            return res
-            .status(423)
+            return res.status(423)
             .send({status: false, message: "This email already exists"});
     } else{
     bcrypt
@@ -44,7 +42,8 @@ exports.signUp = (req, res, next) => {
       user.save();
       return user;
     })
-    .then(() => res.status(200).send({ status: true, message: "User registered successfully" }))
+    .then(() => res.status(200)
+    .send({ status: true, message: "User registered successfully" }))
     }
     })
     .catch(err => console.log(err));
@@ -79,3 +78,64 @@ exports.logIn = (req, res, next) =>{
     })
     .catch(err => console.log(err));
 }
+
+exports.grantAdminAccess = (req, res, next) => {
+
+  const token = req.body.token;
+  if(!token) {
+    return res.status(404)
+    .send({ status: false, message: "Pleas input a valid token"})
+  }
+  else{
+   User.findOne({token})
+    .then( token => {
+      const role = user.role
+      if(role != "admin") {
+        return res.status(404)
+        .send({ status: false, message: "You are not authorized to access this resource"})
+      }
+    })
+    .catch(err => console.log(err));
+  }
+}
+
+exports.grantTutorAccess = (req, res, next) => {
+
+  const token = req.body.token;
+  if(!token) {
+    return res.status(404)
+    .send({ status: false, message: "Pleas input a valid token"})
+  }
+  else{
+   User.findOne({token})
+    .then( token => {
+      const role = user.role
+      if(role != "tutor") {
+        return res.status(404)
+        .send({ status: false, message: "You are not authorized to access this resource"})
+      }
+    })
+    .catch(err => console.log(err));
+  }
+}
+
+exports.grantUserAccess = (req, res, next) => {
+
+  const token = req.body.token;
+  if(!token) {
+    return res.status(404)
+    .send({ status: false, message: "Pleas input a valid token"})
+  }
+  else{
+   User.findOne({token})
+    .then( token => {
+      const role = user.role
+      if(!role) {
+        return res.status(404)
+        .send({ status: false, message: "You are not authorized to access this resource"})
+      }
+    })
+    .catch(err => console.log(err));
+  }
+}
+
