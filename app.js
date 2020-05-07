@@ -2,11 +2,13 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 const authRoutes = require("./routes/auth");
+const genRoutes = require("./routes/genRoute");
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(authRoutes);
+app.use(genRoutes);
 app.use((req, res) => {
     res.send("<h1>Welcome to my app</h1>");
 });
