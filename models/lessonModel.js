@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -8,3 +9,17 @@ const lessonSchema = new Schema({
 });
 
 module.exports = mongoose.model('Lesson', lessonSchema);
+=======
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const lessonSchema = new Schema({
+    tutorName: { type: String, required: true},
+    subjectsName: { type: String, required: true },
+    studentName: { type: String, required: true},
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }
+
+});
+
+module.exports = mongoose.model("Lesson", lessonSchema);
+>>>>>>> Stashed changes
