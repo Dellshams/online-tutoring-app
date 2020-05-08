@@ -332,7 +332,7 @@ exports.deleteALessonById = (req, res, next) => {
     .catch(err => console.log(err))
 }
 
-exports.makeTutorAdmin = (req, res, next) =>{
+exports.makeATutorAdmin = (req, res, next) =>{
     const tutorId = req.body
 
     User.findById(tutorId)
