@@ -17,7 +17,10 @@ exports.signUp = (req, res, next) => {
     } else if(userCategory == "admin"){
         res.status(400)
         .send({ status: false, message: "You can't sign up as an admin"})
+<<<<<<< Updated upstream
         return;
+=======
+>>>>>>> Stashed changes
     }
     User.findOne({ email })
     .then(user => {
@@ -36,11 +39,6 @@ exports.signUp = (req, res, next) => {
             password,
             userCategory,
         });
-
-    const token = jwt.sign(
-      { userId: user._id }, "startnginternship", { expiresIn: "1hr"}
-      );
-      user.token = token;
       user.save();
       return user;
     })
@@ -82,4 +80,72 @@ exports.logIn = (req, res, next) =>{
       });
     })
     .catch(err => console.log(err));
+<<<<<<< Updated upstream
 }
+=======
+}
+
+exports.grantAdminAccess =  async (req, res, next) => {
+try{
+  const token = req.body.token;
+  if(!token) {
+    return res.status(404)
+    .send({ status: false, message: "Pleas input a valid token"})
+  }
+
+   user = await User.findOne({token})
+      const userCategory = user.userCategory
+      if(userCategory != "admin") {
+        return res.status(401)
+        .send({ status: false, message: "You are not authorized to access this resource"})
+      }
+      next();
+  }
+  catch(error){
+  next(error)
+  }
+}
+
+exports.grantTutorAccess =  async (req, res, next) => {
+  try{
+    const token = req.body.token;
+    if(!token) {
+      return res.status(404)
+      .send({ status: false, message: "Pleas input a valid token"})
+    }
+
+     user = await User.findOne({token})
+        const userCategory = user.userCategory
+        if(userCategory != "tutor") {
+          return res.status(401)
+          .send({ status: false, message: "You are not authorized to access this resource"})
+        }
+        next();
+    }
+    catch(error){
+    next(error)
+    }
+  }
+
+exports.grantUserAccess =  async (req, res, next) => {
+  try{
+    const token = req.body.token;
+    if(!token) {
+      return res.status(404)
+      .send({ status: false, message: "Pleas input a valid token"})
+    }
+
+    user = await User.findOne({token})
+        const userCategory = user.userCategory
+        if(!userCategory) {
+          return res.status(401)
+          .send({ status: false, message: "You are not authorized to access this resource"})
+        }
+        next();
+  }
+  catch(error){
+  next(error)
+    }
+  }
+
+>>>>>>> Stashed changes
