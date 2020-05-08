@@ -44,4 +44,5 @@ router.delete("/api/v1/lesson/:id",userAuth.grantAdminAccess, adminAuth.getALess
 
 //to make a tutor an admin
 router.patch("api/v1/user",userAuth.grantAdminAccess, adminAuth.makeATutorAdmin);
+
 module.exports = router;
