@@ -17,10 +17,6 @@ exports.signUp = (req, res, next) => {
     } else if(userCategory == "admin"){
         res.status(400)
         .send({ status: false, message: "You can't sign up as an admin"})
-<<<<<<< Updated upstream
-        return;
-=======
->>>>>>> Stashed changes
     }
     User.findOne({ email })
     .then(user => {
@@ -80,9 +76,6 @@ exports.logIn = (req, res, next) =>{
       });
     })
     .catch(err => console.log(err));
-<<<<<<< Updated upstream
-}
-=======
 }
 
 exports.grantAdminAccess =  async (req, res, next) => {
@@ -148,4 +141,3 @@ exports.grantUserAccess =  async (req, res, next) => {
     }
   }
 
->>>>>>> Stashed changes

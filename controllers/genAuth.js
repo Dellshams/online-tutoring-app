@@ -4,16 +4,6 @@ const Category= require("../models/categoryModel");
 
 exports.getSubjectInCategoryById = (req, res, next) =>{
     const subjectId = req.body;
-<<<<<<< Updated upstream
-    const categoryName = req.body;
-
-    Category.findOne({ name: categoryName })
-    .populate({ path: "subjects", match: { _id: subjectId }})
-    .then( subject => {
-        if(!subject){
-            return res.status(404)
-            .send({ status: false, message: "Subject not found" })
-=======
     const categoryName = req.body
 
     Category.findOne({ name: categoryName })
@@ -26,7 +16,6 @@ exports.getSubjectInCategoryById = (req, res, next) =>{
         else{
             return res.status(200)
             .json({ status: true, message: subject.subjects})
->>>>>>> Stashed changes
         }
         res.status(200).send({ message:"subject found", subject: subjects })
     })

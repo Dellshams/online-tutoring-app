@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 const User = require("../models/user");
 const Category= require("../models/categoryModel");
 const Subject = require("../models/subjectModel");
@@ -355,4 +353,3 @@ exports.makeTutorAdmin = (req, res, next) =>{
     })
     .catch(err => console.log(err));
   }
->>>>>>> Stashed changes
