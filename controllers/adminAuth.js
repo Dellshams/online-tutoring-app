@@ -332,3 +332,24 @@ exports.deleteALessonById = (req, res, next) => {
     .catch(err => console.log(err))
 }
 
+exports.makeTutorAdmin = (req, res, next) =>{
+    const tutorId = req.body
+
+    User.findById(tutorId)
+    .then(result =>{
+        if(!result) {
+        return res
+        .status(404).json({ status: false, message: "Cannot find Tutor"})
+        }
+        else{
+
+            User.findByIdAndUpdate(tutorId, {userCategory: 'admin' })
+            .then( tutor =>{
+            tutor.save()
+            return res.status(200)
+            .json({ status: true, message: "Upgraded tutor to admin role!"})
+        })
+        }
+    })
+    .catch(err => console.log(err));
+  }
