@@ -333,7 +333,7 @@ exports.deleteALessonById = (req, res, next) => {
 }
 
 exports.makeATutorAdmin = (req, res, next) =>{
-    const tutorId = req.body
+    const tutorId = req.body;
 
     User.findById(tutorId)
     .then(result =>{
