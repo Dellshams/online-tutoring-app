@@ -5,19 +5,18 @@ const Subject = require("../models/subjectModel");
 
 exports.getSubjectInCategoryById = (req, res, next) =>{
     const subjectId = req.body;
+    const categoryName = req.body
 
-    Subject.findById(subjectId)
+    Category.findOne({ name: categoryName })
+    .populate({path: 'subjects', match: { _id: subjectId }})
     .then( subject => {
         if(!subject){
             return res.status(404)
-            .send({ status: false, message: "subject not found"})
+            .json({ status: false, message: "subject not found"})
         }
         else{
-            Subject.findById(subjectId)
-            .then( subject => {
-                return res.status(200)
-                .send({ status: true, message: subject})
-            })
+            return res.status(200)
+            .json({ status: true, message: subject.subjects})
         }
     })
     .catch( err => console.log (err))
@@ -55,12 +54,12 @@ exports.getAllCategories = (req, res, next) => {
     .catch( err => console.log (err))
 }
 
-// exports.searchForTutors = (req,res, next) => {
+exports.searchForTutors = (req,res, next) => {
 
-//     ------.find().sort({ firstName : 1 })
-//     .then( found =>{
-//         res.status(200)
-//         .send({ status: true, message: found })
-//     })
-//     .catch( err => console.log (err))
-// }
+    User.find({ role: tutor }).sort({ firstName : 1 })
+    .then( found =>{
+        res.status(200)
+        .send({ status: true, message: found })
+    })
+    .catch( err => console.log (err))
+}
