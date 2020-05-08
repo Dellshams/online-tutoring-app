@@ -3,14 +3,16 @@ const express = require('express');
 const app = express();
 const authRoutes = require("./routes/auth");
 const genRoutes = require("./routes/genRoute");
+const adminRoutes = require("./routes/adminRoute");
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(authRoutes);
 app.use(genRoutes);
-app.use((req, res) => {
-    res.send("<h1>Welcome to my app</h1>");
+app.use(adminRoutes);
+app.get("/", (req, res) => {
+    res.send("Welcome to my app");
 });
 
 
