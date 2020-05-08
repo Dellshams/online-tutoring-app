@@ -16,7 +16,6 @@ exports.signUp = (req, res, next) => {
     } else if(userCategory == "admin"){
         return res.status(400)
         .send({ status: false, message: "You can't sign up as an admin"})
-
     }
     User.findOne({ email })
     .then(user => {
@@ -34,11 +33,6 @@ exports.signUp = (req, res, next) => {
             password,
             userCategory,
         });
-
-    const token = jwt.sign(
-      { userId: user._id }, "startnginternship", { expiresIn: "1hr"}
-      );
-      user.token = token;
       user.save();
       return user;
     })
@@ -79,63 +73,66 @@ exports.logIn = (req, res, next) =>{
     .catch(err => console.log(err));
 }
 
-exports.grantAdminAccess = (req, res, next) => {
-
+exports.grantAdminAccess =  async (req, res, next) => {
+try{
   const token = req.body.token;
   if(!token) {
     return res.status(404)
     .send({ status: false, message: "Pleas input a valid token"})
   }
-  else{
-   User.findOne({token})
-    .then( token => {
-      const role = user.role
-      if(role != "admin") {
-        return res.status(404)
+
+   user = await User.findOne({token})
+      const userCategory = user.userCategory
+      if(userCategory != "admin") {
+        return res.status(401)
         .send({ status: false, message: "You are not authorized to access this resource"})
       }
-    })
-    .catch(err => console.log(err));
+      next();
+  }
+  catch(error){
+  next(error)
   }
 }
 
-exports.grantTutorAccess = (req, res, next) => {
+exports.grantTutorAccess =  async (req, res, next) => {
+  try{
+    const token = req.body.token;
+    if(!token) {
+      return res.status(404)
+      .send({ status: false, message: "Pleas input a valid token"})
+    }
 
-  const token = req.body.token;
-  if(!token) {
-    return res.status(404)
-    .send({ status: false, message: "Pleas input a valid token"})
+     user = await User.findOne({token})
+        const userCategory = user.userCategory
+        if(userCategory != "tutor") {
+          return res.status(401)
+          .send({ status: false, message: "You are not authorized to access this resource"})
+        }
+        next();
+    }
+    catch(error){
+    next(error)
+    }
   }
-  else{
-   User.findOne({token})
-    .then( token => {
-      const role = user.role
-      if(role != "tutor") {
-        return res.status(404)
-        .send({ status: false, message: "You are not authorized to access this resource"})
-      }
-    })
-    .catch(err => console.log(err));
-  }
-}
 
-exports.grantUserAccess = (req, res, next) => {
+exports.grantUserAccess =  async (req, res, next) => {
+  try{
+    const token = req.body.token;
+    if(!token) {
+      return res.status(404)
+      .send({ status: false, message: "Pleas input a valid token"})
+    }
 
-  const token = req.body.token;
-  if(!token) {
-    return res.status(404)
-    .send({ status: false, message: "Pleas input a valid token"})
+    user = await User.findOne({token})
+        const userCategory = user.userCategory
+        if(!userCategory) {
+          return res.status(401)
+          .send({ status: false, message: "You are not authorized to access this resource"})
+        }
+        next();
   }
-  else{
-   User.findOne({token})
-    .then( token => {
-      const role = user.role
-      if(!role) {
-        return res.status(404)
-        .send({ status: false, message: "You are not authorized to access this resource"})
-      }
-    })
-    .catch(err => console.log(err));
+  catch(error){
+  next(error)
+    }
   }
-}
 

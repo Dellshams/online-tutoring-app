@@ -24,9 +24,10 @@ exports.createCategory = (req, res, next) => {
             return newCategory
         }
     })
-    .then(() => res.status(200).
-    send({ status: true, message: "Category created" })
-    )
+    .then( newCategory => {
+    res.status(200).
+    send({ status: true, message: "Category created", newCategory })
+    })
     .catch(err => console.log(err))
 }
 
@@ -38,23 +39,25 @@ exports.createSubjects = (req, res, next) => {
     Subject.findOne({ subjectName })
     .then( subject => {
         if(subject){
-            return res.status(423)
+            return res.status(404)
             .send({ status: false, message: "Subject exists" })
         }
         else{
             let newSubject = new Subject({ subjectName, Category: categoryName })
             newSubject.save();
 
-            Category.findOneAndUpdate( categoryName, { $push: {subject: newSubject.id}},
-                { new: true})
+            Category.findOneAndUpdate( categoryName, { $push: { subjects : newSubject.id}},
+                { new: true, useFindAndModify: false})
             .then(newSubject => {
                 return  newSubject.save()
             })
             return newSubject
         }
     })
-    .then(() => res.status(200).send({ status: true, message: "Subject created" })
-    )
+    .then(newSubject => {
+        res.status(200)
+        .json({ status: true, message: "Subject created", newSubject })
+    })
     .catch(err => console.log(err))
 }
 
@@ -70,15 +73,13 @@ exports.updateSubjectInCategoryById = (req, res, next) => {
         }
         else{
             Subject.findByIdAndUpdate(subjectId, {subjectName})
-            .then( () =>
 
-                Subject.update(subjectId)
-                .then( ()=>
+                Subject.findById(subjectId)
+                .then( subject => {
                     res.status(200)
-                    .send({ status: true, message: "Subject status has been updated" })
-                )
-            )
-        }
+                    .send({ status: true, message: "Subject status has been updated", data: subject })
+                })
+            }
     })
     .catch( err => console.log(err))
 }
@@ -96,14 +97,12 @@ exports.deleteSubjectInCategoryById = (req, res, next) => {
         }
         else{
             Subject.findByIdAndDelete(subjectId)
-            .then( () =>
+            .then( subject => {
 
-                Category.update( categoryName, { $pull: { subject: subjectId}})
-                 .then( () =>
-                res.status(200)
-                .send({ status:true, message:  "Subject deleted"})
-                )
-            )
+                Category.update( categoryName, { $pull: { subjects : subjectId}})
+                return res.status
+                .json({ status:true, message:  "Subject deleted"})
+            })
         }
     })
     .catch(err => console.log(err))
@@ -121,8 +120,8 @@ exports.deleteCategory = (req, res, next) => {
         else{
             Category.findByIdAndDelete(categoryId)
             .then( category => {
-                return res.status(200)
-                .send({ status: true, message: "Category deleted"})
+                res.status(200)
+                .send({ status: true, message: "Category deleted", data: category})
             })
         }
     })
@@ -152,10 +151,10 @@ exports.deleteCategory = (req, res, next) => {
 
 exports.getAllTutors = (req, res, next) => {
 
-    User.find({ role: "tutor"})
+    User.find({ userCategory: "tutor"})
     .then( tutors => {
         return res.status(200)
-        .send({ status: true, message: tutors})
+        .send({ status: true, data: tutors})
     })
     .catch(err => console.log(err))
 }
@@ -170,11 +169,8 @@ exports.getTutorById = (req, res, next) => {
             .send({ status: false, message: " Tutor not found "})
         }
         else{
-            User.findById(tutorId)
-            .then( tutor => {
-                return res.status(200)
-                .send({ status: true, message: tutor})
-            })
+            return res.status(200)
+            .json({ status: true, data: tutor})
         }
     })
     .catch(err => console.log(err))
@@ -192,10 +188,8 @@ exports.deleteTutorById = (req, res, next) => {
         else{
             User.findByIdAndDelete(tutorId)
             .then( tutor => {
-                if(tutor){
-                    return res.status(200)
-                    .send({ status: true, message: "Tutor deleted"})
-                }
+                return res.status(200)
+                .send({ status: true, message: "Tutor deactivated"})
             })
         }
     })
@@ -203,53 +197,64 @@ exports.deleteTutorById = (req, res, next) => {
 }
 
 exports.bookALesson = async (req, res, next) => {
+    try{
     const tutorName = req.body;
     const subjectName = req.body;
     const studentName = req.body;
-    const categoryName = req.body;
+    const categoryId = req.body;
 
-    await User.findOne ({tutorName})
-    .then( tutor => {
+    const tutor = await User.findOne ({firstName: tutorName})
         if(!tutor){
             return res.status(404)
             .send({ status: false, message: "Tutor not found"})
         }
-    })
 
-    await Subject.findOne ({subjectName})
-    .then( subject => {
+    const subject = await Subject.findOne ({subjectName})
         if(!subject){
             return res.status(404)
             .send({ status: false, message: "subject not found"})
         }
-    })
 
-    await User.findOne ({studentName})
-    .then( student => {
-        if(!student){
+    const students = await User.findOne ({firstName: studentName})
+        if(!students){
             return res.status(404)
             .send({ status: false, message: "Student not found"})
         }
-    })
 
-    await Category.findOne ({categoryName})
-    .then( category => {
+    const category = await Category.findById (categoryId)
         if(!category){
             return res.status(404)
             .send({ status: false, message: "Category not found"})
         }
-    })
+
+    const category = await Lesson.findById(lessonId)
+        if(Lesson){
+            return res.status(200)
+            .send({ status: true, message: "Lesson exists"})
+        }
 
     let newLesson = await new Lesson({
-        tutorName,
-        subjectName,
-        studentName,
-        categoryId,
+    tutorName: tutorName,
+    subjectName,
+    studentName: studentName,
+    category: categoryId,
     })
-
     await newLesson.save();
-    return res.status(200)
-    .send({ status: true, message: "New Lesson registered" })
+
+    const newLessonTutor = await User.findOneAndUpdate( {firstname: tutorName}, { $push: { lesson: newLesson._id }},
+        { new: true, useFindAndModify: false });
+        await newLessonTutor.save();
+
+    const newLessonStudent = await User.findOneAndUpdate( {firstname: studentName}, { $push: { lesson: newLesson._id }},
+        { new: true, useFindAndModify: false });
+        await newLessonStudent.save();
+
+    res.status(200)
+    .json({ status: true, message: "New Lesson registered", data: newLesson })
+}
+catch(error){
+    next(error)
+}
 }
 
 exports.getLessons = (req, res, next) => {
@@ -272,48 +277,39 @@ exports.getALessonById = (req, res, next) => {
             .send({ status: false, message: "Lesson not found"})
         }
         else{
-            Lesson.findById(lessonId)
-            .then( lesson => {
-                if(lesson){
-                    return res.status(200)
-                    .send({ status: true, message: lesson})
-                }
-            })
+               return res.status(200)
+                .json({ status: true, data: lesson})
         }
     })
     .catch(err => console.log(err))
 }
 
-exports.updateALessonById = (req, res, next ) => {
-    const tutorName = req.body;
-    const subjectName = req.body;
-    const studentName = req.body;
-    const categoryName = req.body;
+exports.updateALessonById = async(req, res, next ) => {
+    try {
+        const tutorName = req.body;
+        const subjectName = req.body;
+        const studentName = req.body;
+        const categoryId = req.body;
 
-    Lesson.findById(lessonId)
-    .then( lessons =>{
-        if(!lessons){
-            return res.status(404)
-            .send({status: false, message: "lesson not found"})
-        }
-        else{
-            Lesson.findByIdAndUpdate(lessonId, {
-                studentName: student,
-                tutorName: tutor,
-                subjectName: subject,
-                category: categoryId,
-            })
-            .then( () =>
+        const lessons = await Lesson.findById(lessonId)
+            if(!lessons){
+                return res.status(404)
+                .send({status: false, message: "lesson not found"})
+            }
 
-                Lesson.update(lessonId)
-                .then( subject => {
-                    return res.status(200)
-                    .send({ status: true, message: "Lesson status has been updated", subject })
-                })
-            )
-        }
-    })
-    .catch(err => console.log(err))
+        const updatedLesson = await Lesson.findByIdAndUpdate(lessonId, {
+            studentName: studentName,
+            tutorName: tutorName,
+            subjectName,
+            category: categoryId,
+        })
+        await updatedLesson.save();
+
+        const lesson = await Lesson.findById(lessonId)
+        res.status(200)
+        .json({ status: true, message: "Lesson status has been updated", data: lesson })
+
+    }catch(err){console.log(err)}
 }
 
 exports.deleteALessonById = (req, res, next) => {
@@ -327,11 +323,33 @@ exports.deleteALessonById = (req, res, next) => {
         }
         else{
             Lesson.findByIdAndDelete(lessonId)
-            .then(lesson => {
-                return res.status(200)
-                .send({ status: true, message: "Lesson deleted"})
+            .then( lessons => {
+                res.status(200)
+                .json({ status: true, message: "Lesson deleted"})
             })
         }
     })
     .catch(err => console.log(err))
 }
+
+exports.makeTutorAdmin = (req, res, next) =>{
+    const tutorId = req.body
+
+    User.findById(tutorId)
+    .then(result =>{
+        if(!result) {
+        return res
+        .status(404).json({ status: false, message: "Cannot find Tutor"})
+        }
+        else{
+
+            User.findByIdAndUpdate(tutorId, {userCategory: 'admin' })
+            .then( tutor =>{
+            tutor.save()
+            return res.status(200)
+            .json({ status: true, message: "Upgraded tutor to admin role!"})
+        })
+        }
+    })
+    .catch(err => console.log(err));
+  }
