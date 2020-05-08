@@ -14,6 +14,8 @@ const userSchema = new Schema({
 
     token: { type: String },
 
+    lesson: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
+
     userCategory: { type: String, enum: ["student","tutor","admin"] },
 
 },  {timestamps: true});
