@@ -252,9 +252,7 @@ exports.bookALesson = async (req, res, next) => {
     res.status(200)
     .json({ status: true, message: "New Lesson registered", data: newLesson })
 }
-catch(error){
-    next(error)
-}
+catch(err){next(err)}
 }
 
 exports.getLessons = (req, res, next) => {
@@ -308,8 +306,8 @@ exports.updateALessonById = async(req, res, next ) => {
         const lesson = await Lesson.findById(lessonId)
         res.status(200)
         .json({ status: true, message: "Lesson status has been updated", data: lesson })
-
-    }catch(err){console.log(err)}
+    }
+    catch(err){console.log(err)}
 }
 
 exports.deleteALessonById = (req, res, next) => {
