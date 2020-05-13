@@ -227,8 +227,8 @@ exports.bookALesson = async (req, res, next) => {
             .send({ status: false, message: "Category not found"})
         }
 
-    const category = await Lesson.findById(lessonId)
-        if(Lesson){
+    const lesson = await Lesson.findById(lessonId)
+        if(lesson){
             return res.status(200)
             .send({ status: true, message: "Lesson exists"})
         }
