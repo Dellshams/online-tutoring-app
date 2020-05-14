@@ -37,3 +37,21 @@ This is an Online Tutoring app created as a task project in Startdotng
     "message": "User registered successfully"
 }
 ```
+
+**Login**
+
+`Route: POST /api/vi/login`
+
+**Required Parameters**
+
+1. email
+2. password
+
+**Response**
+```
+{
+    "status": true,
+    "message": "Login successful",
+    "_id": ,
+    "token":
+}
