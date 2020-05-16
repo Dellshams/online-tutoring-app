@@ -5,9 +5,9 @@ const Lesson = require("../models/lessonModel");
 
 
 exports.createCategory = (req, res, next) => {
-    const categoryName = req.body;
+    const categoryName = req.body.categoryName;
 
-    if(categoryName != "primary" || "jss" || "sss") {
+    if( categoryName !== "primary" && categoryName !== "jss" && categoryName !== "sss") {
         return res.status(404)
         .send({status: false, message: "Name of Category can only be primary, jss, sss"})
     }
@@ -26,7 +26,7 @@ exports.createCategory = (req, res, next) => {
     })
     .then( newCategory => {
     res.status(200).
-    send({ status: true, message: "Category created", newCategory })
+    json({ status: true, message: "Category created", newCategory })
     })
     .catch(err => console.log(err))
 }

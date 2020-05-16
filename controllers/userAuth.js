@@ -13,7 +13,8 @@ exports.signUp = (req, res, next) => {
         return res.status(400)
         .send({ status: false, message: "All fields are required"})
 
-    } else if(userCategory == "admin"){
+    }
+    else if(userCategory == "admin"){
         return res.status(400)
         .send({ status: false, message: "You can't sign up as an admin"})
     }
@@ -31,13 +32,13 @@ exports.signUp = (req, res, next) => {
             lastName,
             email,
             password,
-            userCategory,
+            userCategory: userCategory || "student",
         });
       user.save();
       return user;
     })
-    .then(() => res.status(200)
-    .send({ status: true, message: "User registered successfully" }))
+    .then((user) => res.status(200)
+    .send({ status: true, message: "User registered successfully", user: user }))
     }
     })
     .catch(err => console.log(err));
@@ -58,19 +59,21 @@ exports.logIn = (req, res, next) =>{
       .then(valid =>{
         if(!valid){
           return res
-          .status(403)
+          .status(404)
           .send({status: false, message: "Incorrect Password, please review your details and try again "})
         }
         const token = jwt.sign(
           { email: user.email, _id: user._id }, "startnginternship", { expiresIn: "1hr" }
         );
-        User.findByIdAndUpdate(user._id, {token: token})
-        res.status(200).send({
-          status: true, message: "Login successful", _id: user._id, token });
-        console.log(user.token)
-      });
+        User.findByIdAndUpdate( {_id: user._id}, { token: token }, { new: true, upsert: true, useFindAndModify: false})
+        .then( result => {
+          res.status(200)
+        .send({status: true, message: "Login successful", _id: user._id, token})
+        })
+        console.log(token)
+      })
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
 }
 
 exports.grantAdminAccess =  async (req, res, next) => {
@@ -81,9 +84,9 @@ try{
     .send({ status: false, message: "Pleas input a valid token"})
   }
 
-   user = await User.findOne({token})
+   user = await User.findOne({token: token})
       const userCategory = user.userCategory
-      if(userCategory != "admin") {
+      if(userCategory !== "admin") {
         return res.status(401)
         .send({ status: false, message: "You are not authorized to access this resource"})
       }
@@ -102,7 +105,7 @@ exports.grantTutorAccess =  async (req, res, next) => {
       .send({ status: false, message: "Pleas input a valid token"})
     }
 
-     user = await User.findOne({token})
+     user = await User.findOne({token: token})
         const userCategory = user.userCategory
         if(userCategory != "tutor") {
           return res.status(401)
@@ -123,7 +126,7 @@ exports.grantUserAccess =  async (req, res, next) => {
       .send({ status: false, message: "Pleas input a valid token"})
     }
 
-    user = await User.findOne({token})
+    user = await User.findOne({token: token})
         const userCategory = user.userCategory
         if(!userCategory) {
           return res.status(401)
