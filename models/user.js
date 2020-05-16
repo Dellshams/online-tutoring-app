@@ -10,13 +10,13 @@ const userSchema = new Schema({
 
     password: { type: String, required: true },
 
-    subjects: { type: Array },
+    subjects: [{ type: Schema.Types.ObjectId, ref: "Subject" }],
 
     token: { type: String },
 
-    lesson: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
+    lesson: [{ type: Schema.Types.ObjectId, ref: "Lesson" }],
 
-    userCategory: { type: String, enum: ["student","tutor","admin"] },
+    userCategory: { type: String, enum: ["student","tutor","admin"], default: "student" },
 
 },  {timestamps: true});
 
