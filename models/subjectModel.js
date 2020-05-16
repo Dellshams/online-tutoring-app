@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const subjectSchema = new Schema({
     subjectName: { type: String, required: true },
-    tutors: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    tutors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     category: { type: String }
 
 },  {timestamps: true});
