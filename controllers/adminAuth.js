@@ -260,7 +260,7 @@ exports.getLessons = (req, res, next) => {
     Lesson.find({})
     .then( lessons =>{
         return res.status(200)
-        .send({ status: true, message: lessons })
+        .json({ status: true, message: lessons })
     })
     .catch(err => console.log(err))
 }
