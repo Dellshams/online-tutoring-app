@@ -177,7 +177,7 @@ exports.getTutorById = (req, res, next) => {
 }
 
 exports.deleteTutorById = (req, res, next) => {
-    const tutorId = req.body;
+    const tutorId = req.body.tutorId;
 
     User.findById(tutorId)
     .then( tutor => {
