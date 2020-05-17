@@ -80,7 +80,7 @@ This is an Online Tutoring app created as a task project in Startdotng
 
 **2. Admin can create subjects under 3 categories: primary, jss, sss**
 
-`Post /api/v1/subject`
+`POST /api/v1/subject`
 
 **Parameters**
 
@@ -98,6 +98,33 @@ This is an Online Tutoring app created as a task project in Startdotng
         "_id": "5ec0d8df95afb802a4a35a46",
         "subjectName": "English",
         "categoryName": "primary"
+    }
+}
+```
+
+**3. Admin can update a subject in a category (by Id)**
+
+`PATCH api/v1/subject`
+
+**Parameters**
+
+1. subjectId
+2. subjectName
+3. token
+
+**Response**
+```
+{
+    "status": true,
+    "message": "Subject status has been updated",
+    "data": {
+        "tutors": [],
+        "_id": "5ec0d8df95afb802a4a35a46",
+        "subjectName": "Geography",
+        "categoryName": "primary",
+        "createdAt": "2020-05-17T06:25:35.982Z",
+        "updatedAt": "2020-05-17T06:54:35.645Z",
+        "__v": 0
     }
 }
 ```
