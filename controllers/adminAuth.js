@@ -45,13 +45,13 @@ exports.createSubjects = (req, res, next) => {
         else{
             let newSubject = new Subject({ subjectName: subjectName, categoryName: categoryName })
             newSubject.save()
-            return newSubject
 
-            Category.findOneAndUpdate( subjects, { $push: { subjects : Subject.newSubjectId }},
+            Category.findOneAndUpdate( {categoryName: categoryName}, { $push: { subjects : newSubject._id }},
                 { new: true, upsert: true, useFindAndModify: false})
             .then(result => {
-                result.save()
+               return result.save();
             })
+            return newSubject
         }
     })
     .then( newSubject => {
