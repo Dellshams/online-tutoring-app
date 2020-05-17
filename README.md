@@ -129,3 +129,37 @@ This is an Online Tutoring app created as a task project in Startdotng
 }
 ```
 
+**4. Admin can delete a subject in a category (by Id)**
+
+`DELETE /api/v1/subject`
+
+**Parameters**
+
+1. subjectId
+2. categoryName
+3. token
+
+**Response**
+```
+{
+    "status": true,
+    "message": "Subject deleted"
+}
+```
+
+**5. Admin can delete a category**
+
+`DELETE /api/v1/category`
+
+**Parameters**
+
+1. categoryId
+2. token
+
+**Response**
+```
+{
+    "status": true,
+    "message": "Category deleted"
+}
+```
