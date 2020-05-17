@@ -265,3 +265,32 @@ This is an Online Tutoring app created as a task project in Startdotng
 }
 ```
 
+**9. Admin can book Lessons**
+
+`POST /api/v1/lesson`
+
+**Parameters**
+
+1. tutorName
+2. subjectName
+3. studentName
+4. categoryId
+
+**Response**
+```
+{
+    "status": true,
+    "message": "New Lesson registered",
+    "data": {
+        "_id": "5ec1a6af25255c22f88eeaca",
+        "tutorName": "Kelvin",
+        "subjectName": "Physics",
+        "studentName": "Mark",
+        "category": "5ec1a218886bc2c8f43b34d5",
+        "createdAt": "2020-05-17T21:03:43.979Z",
+        "updatedAt": "2020-05-17T21:03:43.979Z",
+        "__v": 0
+    }
+}
+```
+
