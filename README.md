@@ -87,3 +87,18 @@ This is an Online Tutoring app created as a task project in Startdotng
 1. subjectName
 2. categoryName
 3. token
+
+**Response**
+```
+{
+    "status": true,
+    "message": "Subject created",
+    "newSubject": {
+        "tutors": [],
+        "_id": "5ec0d8df95afb802a4a35a46",
+        "subjectName": "English",
+        "categoryName": "primary"
+    }
+}
+```
+
