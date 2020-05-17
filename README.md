@@ -219,7 +219,7 @@ This is an Online Tutoring app created as a task project in Startdotng
 }
 ```
 
-**7. Admin can deactivate a tutor (by Id)**
+**7. Admin can get a tutor (by Id)**
 
 `GET /api/v1/tutor/:id`
 
@@ -247,3 +247,21 @@ This is an Online Tutoring app created as a task project in Startdotng
     }
 }
 ```
+
+**8. Admin can deactivate a tutor (by Id)**
+
+`DELETE /api/v1/tutor/:id`
+
+**Parameters**
+
+1. tutorId
+2. token
+
+**Response**
+```
+{
+    "status": true,
+    "message": "Tutor deactivated"
+}
+```
+
