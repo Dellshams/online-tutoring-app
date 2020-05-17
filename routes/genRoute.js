@@ -5,7 +5,7 @@ const userAuth = require("../controllers/userAuth");
 
 
 //to get a subject in a a category by ID
-router.get("/api/v1/category/subject/:id",userAuth.grantUserAccess, genAuth.getSubjectInCategoryById);
+router.get("/api/v1/category/subject",userAuth.grantUserAccess, genAuth.getSubjectInCategoryById);
 
 //to get all subjects in a category
 router.get("/api/v1/category/subjects",userAuth.grantUserAccess, genAuth.getAllSubjectsInACategory);

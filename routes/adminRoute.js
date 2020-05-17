@@ -22,10 +22,10 @@ router.delete("/api/v1/category",userAuth.grantAdminAccess, adminAuth.deleteCate
 router.get("/api/v1/tutors",userAuth.grantAdminAccess, adminAuth.getAllTutors);
 
 //to get a tutor by ID
-router.get("/api/v1/tutor/:id",userAuth.grantAdminAccess, adminAuth.getTutorById);
+router.get("/api/v1/tutor",userAuth.grantAdminAccess, adminAuth.getTutorById);
 
 //to deactivate a tutor by ID
-router.delete("/api/v1/tutor/:id",userAuth.grantAdminAccess, adminAuth.deleteTutorById);
+router.delete("/api/v1/tutor",userAuth.grantAdminAccess, adminAuth.deleteTutorById);
 
 //to book a lesson
 router.post("/api/v1/lesson",userAuth.grantAdminAccess, adminAuth.bookALesson);
@@ -34,13 +34,13 @@ router.post("/api/v1/lesson",userAuth.grantAdminAccess, adminAuth.bookALesson);
 router.get("/api/v1/lessons",userAuth.grantAdminAccess, adminAuth.getLessons);
 
 //to get a lesson by ID
-router.get("/api/v1/lesson/:id",userAuth.grantAdminAccess, adminAuth.getALessonById);
+router.get("/api/v1/lesson",userAuth.grantAdminAccess, adminAuth.getALessonById);
 
 //to update a lesson by ID
-router.patch("/api/v1/lesson/:id",userAuth.grantAdminAccess, adminAuth.updateALessonById);
+router.patch("/api/v1/lesson",userAuth.grantAdminAccess, adminAuth.updateALessonById);
 
 //to delete a lesson by ID
-router.delete("/api/v1/lesson/:id",userAuth.grantAdminAccess, adminAuth.getALessonById);
+router.delete("/api/v1/lesson",userAuth.grantAdminAccess, adminAuth.getALessonById);
 
 //to make a tutor an admin
 router.patch("api/v1/user",userAuth.grantAdminAccess, adminAuth.makeATutorAdmin);
