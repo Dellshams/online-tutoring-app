@@ -198,10 +198,10 @@ exports.deleteTutorById = (req, res, next) => {
 
 exports.bookALesson = async (req, res, next) => {
     try{
-    const tutorName = req.body;
-    const subjectName = req.body;
-    const studentName = req.body;
-    const categoryId = req.body;
+    const tutorName = req.body.tutorName;
+    const subjectName = req.body.subjectName;
+    const studentName = req.body.studentName;
+    const categoryId = req.body.categoryId;
 
     const tutor = await User.findOne ({firstName: tutorName})
         if(!tutor){
@@ -227,11 +227,11 @@ exports.bookALesson = async (req, res, next) => {
             .send({ status: false, message: "Category not found"})
         }
 
-    const lesson = await Lesson.findById(lessonId)
-        if(lesson){
-            return res.status(200)
-            .send({ status: true, message: "Lesson exists"})
-        }
+    // const lesson = await Lesson.findById(lessonId)
+    //     if(lesson){
+    //         return res.status(200)
+    //         .send({ status: true, message: "Lesson exists"})
+    //     }
 
     let newLesson = await new Lesson({
     tutorName: tutorName,
@@ -241,12 +241,12 @@ exports.bookALesson = async (req, res, next) => {
     })
     await newLesson.save();
 
-    const newLessonTutor = await User.findOneAndUpdate( {firstname: tutorName}, { $push: { lesson: newLesson._id }},
-        { new: true, useFindAndModify: false });
+    const newLessonTutor = await User.findOneAndUpdate( {firstName: tutorName}, { $push: { lesson: newLesson._id }},
+        { new: true, upsert: true, useFindAndModify: false });
         await newLessonTutor.save();
 
-    const newLessonStudent = await User.findOneAndUpdate( {firstname: studentName}, { $push: { lesson: newLesson._id }},
-        { new: true, useFindAndModify: false });
+    const newLessonStudent = await User.findOneAndUpdate( {firstName: studentName}, { $push: { lesson: newLesson._id }},
+        { new: true, upsert: true, useFindAndModify: false });
         await newLessonStudent.save();
 
     res.status(200)
