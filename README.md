@@ -294,3 +294,29 @@ This is an Online Tutoring app created as a task project in Startdotng
 }
 ```
 
+**10. Admin can retrieve all lessons**
+
+`GET /api/v1/lessons`
+
+**Parameters**
+
+1. token
+
+**Response**
+```
+{
+    "status": true,
+    "message": [
+        {
+            "_id": "5ec1a6af25255c22f88eeaca",
+            "tutorName": "Kelvin",
+            "subjectName": "Physics",
+            "studentName": "Mark",
+            "category": "5ec1a218886bc2c8f43b34d5",
+            "createdAt": "2020-05-17T21:03:43.979Z",
+            "updatedAt": "2020-05-17T21:03:43.979Z",
+            "__v": 0
+        }
+    ]
+}
+```
