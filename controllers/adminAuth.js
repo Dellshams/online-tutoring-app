@@ -72,7 +72,8 @@ exports.updateSubjectInCategoryById = (req, res, next) => {
             .send({ status: false, message: "Subject not found"})
         }
         else{
-            Subject.findByIdAndUpdate(subjectId, { subjectName: subjectName }, { new: true, upsert: true, useFindAndModify: false})
+            Subject.findByIdAndUpdate(subjectId, { subjectName: subjectName },
+                { new: true, upsert: true, useFindAndModify: false})
             .then( subjectUpdate => {
             res.status(200)
             .send({ status: true, message: "Subject status has been updated", subjectUpdate })
@@ -97,8 +98,9 @@ exports.deleteSubjectInCategoryById = (req, res, next) => {
             Subject.findByIdAndDelete(subjectId)
             .then( subject => {
 
-                Category.update( categoryName, { $pull: { subjects : subjectId}})
-                return res.status
+                Category.update( categoryName, { $pull: { subjects : subjectId}},
+                    { new: true, upsert: true, useFindAndModify: false})
+                return res.status(200)
                 .json({ status:true, message:  "Subject deleted"})
             })
         }
@@ -107,7 +109,7 @@ exports.deleteSubjectInCategoryById = (req, res, next) => {
 }
 
 exports.deleteCategory = (req, res, next) => {
-    const categoryId = req.body
+    const categoryId = req.body.categoryId;
 
     Category.findById(categoryId)
     .then( category => {
@@ -119,7 +121,7 @@ exports.deleteCategory = (req, res, next) => {
             Category.findByIdAndDelete(categoryId)
             .then( category => {
                 res.status(200)
-                .send({ status: true, message: "Category deleted", data: category})
+                .send({ status: true, message: "Category deleted"})
             })
         }
     })
@@ -158,7 +160,7 @@ exports.getAllTutors = (req, res, next) => {
 }
 
 exports.getTutorById = (req, res, next) => {
-    const tutorId = req.body;
+    const tutorId = req.body.tutorId;
 
     User.findById(tutorId)
     .then( tutor => {
@@ -168,7 +170,7 @@ exports.getTutorById = (req, res, next) => {
         }
         else{
             return res.status(200)
-            .json({ status: true, data: tutor})
+            .json({ status: true, tutor})
         }
     })
     .catch(err => console.log(err))
