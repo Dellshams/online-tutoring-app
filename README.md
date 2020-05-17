@@ -117,13 +117,13 @@ This is an Online Tutoring app created as a task project in Startdotng
 {
     "status": true,
     "message": "Subject status has been updated",
-    "data": {
+    "subjectUpdate": {
         "tutors": [],
         "_id": "5ec0d8df95afb802a4a35a46",
         "subjectName": "Geography",
         "categoryName": "primary",
         "createdAt": "2020-05-17T06:25:35.982Z",
-        "updatedAt": "2020-05-17T06:54:35.645Z",
+        "updatedAt": "2020-05-17T07:00:36.071Z",
         "__v": 0
     }
 }
