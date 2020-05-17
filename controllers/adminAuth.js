@@ -33,8 +33,8 @@ exports.createCategory = (req, res, next) => {
 
 
 exports.createSubjects = (req, res, next) => {
-    const subjectName = req.body;
-    const categoryName = req.body;
+    const subjectName = req.body.subjectName;
+    const categoryName = req.body.categoryName;
 
     Subject.findOne({ subjectName })
     .then( subject => {
@@ -43,18 +43,18 @@ exports.createSubjects = (req, res, next) => {
             .send({ status: false, message: "Subject exists" })
         }
         else{
-            let newSubject = new Subject({ subjectName, Category: categoryName })
-            newSubject.save();
-
-            Category.findOneAndUpdate( categoryName, { $push: { subjects : newSubject.id}},
-                { new: true, useFindAndModify: false})
-            .then(newSubject => {
-                return  newSubject.save()
-            })
+            let newSubject = new Subject({ subjectName: subjectName, categoryName: categoryName })
+            newSubject.save()
             return newSubject
+
+            Category.findOneAndUpdate( subjects, { $push: { subjects : Subject.newSubjectId }},
+                { new: true, upsert: true, useFindAndModify: false})
+            .then(result => {
+                result.save()
+            })
         }
     })
-    .then(newSubject => {
+    .then( newSubject => {
         res.status(200)
         .json({ status: true, message: "Subject created", newSubject })
     })
@@ -62,8 +62,8 @@ exports.createSubjects = (req, res, next) => {
 }
 
 exports.updateSubjectInCategoryById = (req, res, next) => {
-    const subjectId = req.body;
-    const subjectName = req.body;
+    const subjectId = req.body.subjectId;
+    const subjectName = req.body.subjectName;
 
     Subject.findById(subjectId)
     .then( subject => {
@@ -72,22 +72,20 @@ exports.updateSubjectInCategoryById = (req, res, next) => {
             .send({ status: false, message: "Subject not found"})
         }
         else{
-            Subject.findByIdAndUpdate(subjectId, {subjectName})
-
-                Subject.findById(subjectId)
-                .then( subject => {
-                    res.status(200)
-                    .send({ status: true, message: "Subject status has been updated", data: subject })
-                })
-            }
+            Subject.findByIdAndUpdate(subjectId, { subjectName: subjectName }, { new: true, upsert: true, useFindAndModify: false})
+            .then( subjectUpdate => {
+            res.status(200)
+            .send({ status: true, message: "Subject status has been updated", subjectUpdate })
+            })
+        }
     })
     .catch( err => console.log(err))
 }
 
 exports.deleteSubjectInCategoryById = (req, res, next) => {
 
-    const subjectId = req.body;
-    const categoryName = req.body;
+    const subjectId = req.body.subjectId;
+    const categoryName = req.body.categoryName;
 
     Subject.findById(subjectId)
     .then( subject => {
