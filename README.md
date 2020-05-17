@@ -95,9 +95,9 @@ This is an Online Tutoring app created as a task project in Startdotng
     "message": "Subject created",
     "newSubject": {
         "tutors": [],
-        "_id": "5ec0d8df95afb802a4a35a46",
-        "subjectName": "English",
-        "categoryName": "primary"
+        "_id": "5ec1237ac58bbf21a859289d",
+        "subjectName": "Chemistry",
+        "categoryName": "sss"
     }
 }
 ```
@@ -119,11 +119,11 @@ This is an Online Tutoring app created as a task project in Startdotng
     "message": "Subject status has been updated",
     "subjectUpdate": {
         "tutors": [],
-        "_id": "5ec0d8df95afb802a4a35a46",
-        "subjectName": "Geography",
-        "categoryName": "primary",
-        "createdAt": "2020-05-17T06:25:35.982Z",
-        "updatedAt": "2020-05-17T07:00:36.071Z",
+        "_id": "5ec1237ac58bbf21a859289d",
+        "subjectName": "Physics",
+        "categoryName": "sss",
+        "createdAt": "2020-05-17T11:43:54.690Z",
+        "updatedAt": "2020-05-17T11:53:07.798Z",
         "__v": 0
     }
 }
