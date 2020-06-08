@@ -1,11 +1,11 @@
 const User = require("../models/user");
 const Category= require("../models/categoryModel");
 const Subject = require("../models/subjectModel");
-const Lesson = require("../models/lessonModel");
+const Lesson = require("../models/lessonModel")
 
 
 exports.createCategory = (req, res, next) => {
-    const categoryName = req.body.categoryName;
+    const categoryName = req.body.categoryName
 
     if( categoryName !== "primary" && categoryName !== "jss" && categoryName !== "sss") {
         return res.status(404)
